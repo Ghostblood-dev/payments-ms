@@ -9,6 +9,7 @@ interface EnvVars {
     ENDPOINT_SECRET_HOOKDECK: string
     SUCCESS_URL: string,
     CANCEL_URL: string,
+    NATS_SERVERS: string,
 }
 
 const envsSchema = joi.object({
@@ -17,6 +18,7 @@ const envsSchema = joi.object({
     ENDPOINT_SECRET_HOOKDECK: joi.string().required(),
     SUCCESS_URL: joi.string().required(),
     CANCEL_URL: joi.string().required(),
+    NATS_SERVERS: joi.string().required(),
 }).unknown(true)
 
 const { error, value } = envsSchema.validate(process.env)
@@ -33,4 +35,5 @@ export const envs = {
     endpointSecretHoockdeck: envsVars.ENDPOINT_SECRET_HOOKDECK,
     successUrl: envsVars.SUCCESS_URL,
     cancelUrl: envsVars.CANCEL_URL,
+    natsServers: envsVars.NATS_SERVERS,
 }

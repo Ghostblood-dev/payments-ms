@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { PaymentsService } from './payments.service';
 import { PaymentSessionDTO } from './dto';
 import { Request, Response } from 'express';
@@ -13,7 +14,8 @@ export class PaymentsController {
     return this.paymentsService.createPaymentSession(paymentSessionDTO)
   }
 
-  @Get('success')
+  @MessagePattern('success')
+  // @Get('success')
   success() {
     return {
       ok: true,
