@@ -7,16 +7,9 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 async function bootstrap() {
   const logger = new Logger('Payments-ms')
 
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      rawBody: true,
-      transport: Transport.NATS,
-      options: {
-        servers: envs.natsServers
-      }
-    },
-  );
+  const app = await NestFactory.create(AppModule, {
+    rawBody: true
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -24,6 +17,17 @@ async function bootstrap() {
       forbidNonWhitelisted: true
     })
   )
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.NATS,
+    options: {
+      servers: envs.natsServers
+    }
+  }, {
+    inheritAppConfig: true
+  });
+  await app.startAllMicroservices();
+
   await app.listen(envs.port);
 
   logger.log(`Payments microservices runing on port ${envs.port}`)
